@@ -29,7 +29,7 @@ public class RabbitHealthIndicator extends AbstractHealthIndicator {
     }
 
     @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {
+    protected void doHealthCheck(Health.Builder builder) {
         builder.up().withDetail("version", getVersion(blueRabbitConnectionFactory, "blue"));
         builder.up().withDetail("version", getVersion(redRabbitConnectionFactory, "red"));
     }
@@ -39,7 +39,7 @@ public class RabbitHealthIndicator extends AbstractHealthIndicator {
 
         String version = this.rabbitTemplate.execute(new ChannelCallback<String>() {
             @Override
-            public String doInRabbit(Channel channel) throws Exception {
+            public String doInRabbit(Channel channel) {
                 Map<String, Object> serverProperties = channel.getConnection()
                         .getServerProperties();
                 return serverProperties.get("version").toString();
