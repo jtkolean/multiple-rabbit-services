@@ -18,6 +18,7 @@ import java.util.Map;
 @EnableRabbit
 @Profile("local")
 public class RabbitLocalConfiguration {
+
     @Bean
     public ConnectionFactory blueRabbitConnectionFactory() {
         return new CachingConnectionFactory("localhost", 5673);
@@ -45,14 +46,6 @@ public class RabbitLocalConfiguration {
     }
 
     @Bean
-    public SimpleRabbitListenerContainerFactory myRabbitListenerContainerFactory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(blueRabbitConnectionFactory());
-        factory.setMaxConcurrentConsumers(5);
-        return factory;
-    }
-
-    @Bean
     public SimpleRabbitListenerContainerFactory redRabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(redRabbitConnectionFactory());
@@ -67,31 +60,4 @@ public class RabbitLocalConfiguration {
         factory.setMaxConcurrentConsumers(5);
         return factory;
     }
-
-
-//    @Bean
-//    public ConnectionFactory blueRabbitConnectionFactory() {
-//        return connectionFactory().rabbitConnectionFactory("blue-rabbit");
-//    }
-//
-//    @Bean
-//    public ConnectionFactory redRabbitConnectionFactory() {
-//        return connectionFactory().rabbitConnectionFactory("red-rabbit");
-//    }
-//
-//    @Bean
-//    @Primary
-//    public ConnectionFactory routing() {
-//        SimpleRoutingConnectionFactory rcf = new SimpleRoutingConnectionFactory();
-//        Map<Object, ConnectionFactory> map = new HashMap<>();
-//        map.put("[red]", redRabbitConnectionFactory());
-//        map.put("[blue]", blueRabbitConnectionFactory());
-//        rcf.setTargetConnectionFactories(map);
-//        return rcf;
-//    }
-//
-//    @Bean
-//    public RabbitTemplate rabbitTemplate() {
-//        return new RabbitTemplate(routing());
-//    }
 }

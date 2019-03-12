@@ -47,14 +47,6 @@ public class RabbitCloudConfiguration extends AbstractCloudConfig {
     }
 
     @Bean
-    public SimpleRabbitListenerContainerFactory myRabbitListenerContainerFactory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(blueRabbitConnectionFactory());
-        factory.setMaxConcurrentConsumers(5);
-        return factory;
-    }
-
-    @Bean
     public SimpleRabbitListenerContainerFactory redRabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(redRabbitConnectionFactory());
