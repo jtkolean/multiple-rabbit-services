@@ -4,22 +4,12 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.connection.SimpleRoutingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
-import org.springframework.retry.policy.SimpleRetryPolicy;
-import org.springframework.retry.support.RetryTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableRabbit
@@ -37,7 +27,7 @@ public class RabbitLocalConfiguration {
         return new CachingConnectionFactory("localhost", 5672);
     }
 
-    @Qualifier(value="blueRabbitTemplate")
+    @Qualifier(value = "blueRabbitTemplate")
     @Bean
     public RabbitTemplate blueRabbitTemplate() {
         return new RabbitTemplate(blueRabbitConnectionFactory());
