@@ -5,7 +5,6 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.SimpleResourceHolder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +21,6 @@ public class MatrixController {
 
     @GetMapping(value = "/pill")
     public String pill(@RequestParam(value = "color") String color) {
-
         if("blue".equalsIgnoreCase(color)) {
             // Bind this connection factory to current thread
             SimpleResourceHolder.bind(blueRabbitConnectionFactory, "[blue]");
