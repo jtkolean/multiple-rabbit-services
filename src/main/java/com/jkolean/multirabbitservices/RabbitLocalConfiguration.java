@@ -6,10 +6,17 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.SimpleRoutingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,25 +31,22 @@ public class RabbitLocalConfiguration {
         return new CachingConnectionFactory("localhost", 5673);
     }
 
+    @Primary
     @Bean
     public ConnectionFactory redRabbitConnectionFactory() {
         return new CachingConnectionFactory("localhost", 5672);
     }
 
-    @Primary
+    @Qualifier(value="blueRabbitTemplate")
     @Bean
-    public ConnectionFactory connectionFactoryRouter() {
-        SimpleRoutingConnectionFactory rcf = new SimpleRoutingConnectionFactory();
-        Map<Object, ConnectionFactory> map = new HashMap<>();
-        map.put("[red]", redRabbitConnectionFactory());
-        map.put("[blue]", blueRabbitConnectionFactory());
-        rcf.setTargetConnectionFactories(map);
-        return rcf;
+    public RabbitTemplate blueRabbitTemplate() {
+        return new RabbitTemplate(blueRabbitConnectionFactory());
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactoryRouter) {
-        return new RabbitTemplate(connectionFactoryRouter);
+    @Primary
+    public RabbitTemplate redRabbitTemplate() {
+        return new RabbitTemplate(redRabbitConnectionFactory());
     }
 
     @Bean
