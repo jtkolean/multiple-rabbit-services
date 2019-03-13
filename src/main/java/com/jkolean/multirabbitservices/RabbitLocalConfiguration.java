@@ -17,6 +17,11 @@ import org.springframework.context.annotation.Profile;
 public class RabbitLocalConfiguration {
 
     @Bean
+    public ConnectionFactory blackRabbitConnectionFactory() {
+        return new CachingConnectionFactory("localhost", 5674);
+    }
+
+    @Bean
     public ConnectionFactory blueRabbitConnectionFactory() {
         return new CachingConnectionFactory("localhost", 5673);
     }
@@ -25,6 +30,12 @@ public class RabbitLocalConfiguration {
     @Bean
     public ConnectionFactory redRabbitConnectionFactory() {
         return new CachingConnectionFactory("localhost", 5672);
+    }
+
+    @Qualifier(value = "blackRabbitTemplate")
+    @Bean
+    public RabbitTemplate blackRabbitTemplate() {
+        return new RabbitTemplate(blackRabbitConnectionFactory());
     }
 
     @Qualifier(value = "blueRabbitTemplate")
@@ -40,9 +51,9 @@ public class RabbitLocalConfiguration {
     }
 
     @Bean
-    public SimpleRabbitListenerContainerFactory redRabbitListenerContainerFactory() {
+    public SimpleRabbitListenerContainerFactory blackRabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(redRabbitConnectionFactory());
+        factory.setConnectionFactory(blackRabbitConnectionFactory());
         factory.setMaxConcurrentConsumers(5);
         return factory;
     }
@@ -51,6 +62,14 @@ public class RabbitLocalConfiguration {
     public SimpleRabbitListenerContainerFactory blueRabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(blueRabbitConnectionFactory());
+        factory.setMaxConcurrentConsumers(5);
+        return factory;
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory redRabbitListenerContainerFactory() {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(redRabbitConnectionFactory());
         factory.setMaxConcurrentConsumers(5);
         return factory;
     }

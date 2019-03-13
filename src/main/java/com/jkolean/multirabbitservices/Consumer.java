@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Consumer {
 
-    @RabbitListener(containerFactory = "redRabbitListenerContainerFactory", queues = "pill")
-    public void processRed(String msg) {
-        System.out.print((char)27 + "[31m Received message from RED container: " + msg);
+    @RabbitListener(containerFactory = "blackRabbitListenerContainerFactory", queues = "pill")
+    public void processBlack(String msg) {
+        System.out.print((char)27 + "[30;47m Received message from BLACK container: " + msg);
         System.out.println((char)27 + "[39m"); // Reset the ANSI escape color to white
     }
 
@@ -18,4 +18,9 @@ public class Consumer {
         System.out.println((char)27 + "[39m"); // Reset the ANSI escape color to white
     }
 
+    @RabbitListener(containerFactory = "redRabbitListenerContainerFactory", queues = "pill")
+    public void processRed(String msg) {
+        System.out.print((char)27 + "[31m Received message from RED container: " + msg);
+        System.out.println((char)27 + "[39m"); // Reset the ANSI escape color to white
+    }
 }

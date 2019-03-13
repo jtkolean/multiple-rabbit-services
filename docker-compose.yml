@@ -1,0 +1,30 @@
+version: '3'
+services:
+  rabbitmq_blue:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit_blue"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq_blue"
+  rabbitmq_red:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit_red"
+    ports:
+      - "15673:15673"
+      - "5673:5673"
+    labels:
+      NAME: "rabbitmq_red"
+    volumes:
+      - ./docker-config/rabbitmq_red.config:/etc/rabbitmq/rabbitmq.config
+  rabbitmq_black:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit_black"
+    ports:
+      - "15674:15674"
+      - "5674:5674"
+    labels:
+      NAME: "rabbitmq_black"
+    volumes:
+      - ./docker-config/rabbitmq_black.config:/etc/rabbitmq/rabbitmq.config

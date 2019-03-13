@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MatrixController {
 
+    @Qualifier("blackRabbitTemplate")
+    @Autowired
+    private RabbitTemplate blackRabbitTemplate;
+
     @Qualifier("blueRabbitTemplate")
     @Autowired
     private RabbitTemplate blueRabbitTemplate;
@@ -22,10 +26,14 @@ public class MatrixController {
     public String pill(@RequestParam(value = "color") String color) {
         if ("blue".equalsIgnoreCase(color)) {
             blueRabbitTemplate.convertAndSend("pill", color);
-        } else {
+            return "Remember: all I'm offering is the truth";
+        } else if("red".equalsIgnoreCase(color)) {
             redRabbitTemplate.convertAndSend("pill", color);
+            return "Remember: all I'm offering is the truth";
+        } else {
+            blackRabbitTemplate.convertAndSend("pill", color);
+            return "The force is strong with you";
         }
-        return "Remember: all I'm offering is the truth";
     }
 
 }
