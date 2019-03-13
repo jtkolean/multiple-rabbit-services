@@ -1,9 +1,12 @@
 package com.jkolean.multirabbitservices;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +33,28 @@ public class RabbitLocalConfiguration {
     @Bean
     public ConnectionFactory redRabbitConnectionFactory() {
         return new CachingConnectionFactory("localhost", 5672);
+    }
+
+    @Bean
+    public AmqpAdmin blackRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(blackRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
+    }
+
+    @Bean
+    public AmqpAdmin blueRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(blueRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
+    }
+
+    @Primary
+    @Bean
+    public AmqpAdmin redRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(redRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
     }
 
     @Qualifier(value = "blackRabbitTemplate")
