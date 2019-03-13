@@ -1,8 +1,11 @@
 package com.jkolean.multirabbitservices;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.config.java.AbstractCloudConfig;
@@ -30,6 +33,29 @@ public class RabbitCloudConfiguration extends AbstractCloudConfig {
     @Bean
     public ConnectionFactory redRabbitConnectionFactory() {
         return connectionFactory().rabbitConnectionFactory("red-rabbit");
+    }
+
+
+    @Bean
+    public AmqpAdmin blackRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(blackRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
+    }
+
+    @Bean
+    public AmqpAdmin blueRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(blueRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
+    }
+
+    @Primary
+    @Bean
+    public AmqpAdmin redRabbitAdmin() {
+        AmqpAdmin admin1 = new RabbitAdmin(redRabbitConnectionFactory());
+        admin1.declareQueue(new Queue("pill", false, false, false));
+        return admin1;
     }
 
     @Qualifier(value = "blackRabbitTemplate")
