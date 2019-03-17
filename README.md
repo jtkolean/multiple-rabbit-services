@@ -1,4 +1,4 @@
-# multiple-rabbit-services
+# spring-multiple-rabbitmq
 Lets connect to multiple rabbitmq services
 
 #### How to setup services
