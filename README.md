@@ -1,7 +1,7 @@
-# spring-multiple-rabbitmq
-Lets connect to multiple rabbitmq services
+# Spring Rabbitmq
+Lets connect to multiple rabbitmq services together
 
-#### How to setup services
+#### How
 1. Install docker *(e.g. brew cask install docker)*
 2. Run `docker-compose up` to spin up those rabbits
 
